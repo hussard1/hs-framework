@@ -2,10 +2,16 @@ package com.hsframework.core.user;
 
 import java.sql.*;
 
-public abstract class UserRepository {
+public class UserRepository {
+
+    private ConnectionMaker connectionMaker;
+
+    public UserRepository(ConnectionMaker connectionMaker) {
+        this.connectionMaker = connectionMaker;
+    }
 
     public void save(User user) throws ClassNotFoundException, SQLException {
-        Connection c = getConnection();
+        Connection c = connectionMaker.makeConnection();
 
         String sql = "insert into users(username, password) values(?, ?)";
         PreparedStatement ps = c.prepareStatement(sql);
@@ -19,7 +25,7 @@ public abstract class UserRepository {
     }
 
     public User findByUsername(String username) throws ClassNotFoundException, SQLException {
-        Connection c = getConnection();
+        Connection c = connectionMaker.makeConnection();
 
         String sql = "select * from users where username = ?";
         PreparedStatement ps = c.prepareStatement(sql);
@@ -41,6 +47,4 @@ public abstract class UserRepository {
 
         return user;
     }
-
-    public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
 }

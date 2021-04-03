@@ -1,6 +1,6 @@
 package com.hsframework.core;
 
-import com.hsframework.core.user.NUserRepository;
+import com.hsframework.core.user.NConnectionMaker;
 import com.hsframework.core.user.User;
 import com.hsframework.core.user.UserRepository;
 
@@ -13,7 +13,7 @@ public class Main {
                 .password("1234")
                 .build();
 
-        UserRepository userRepository = new NUserRepository();
+        UserRepository userRepository = new UserRepository(new NConnectionMaker());
         userRepository.save(user);
 
         System.out.println("사용자 등록 성공 : " + user);
