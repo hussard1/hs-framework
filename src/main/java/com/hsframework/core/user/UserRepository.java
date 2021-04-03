@@ -4,7 +4,7 @@ import java.sql.*;
 
 public class UserRepository {
 
-    private ConnectionMaker connectionMaker;
+    private final ConnectionMaker connectionMaker;
 
     public UserRepository(ConnectionMaker connectionMaker) {
         this.connectionMaker = connectionMaker;
@@ -33,13 +33,14 @@ public class UserRepository {
         ps.setString(1, username);
 
         ResultSet rs = ps.executeQuery();
-
-        rs.next();
-        User user = User.builder()
-                .id(rs.getLong("id"))
-                .username(rs.getString("username"))
-                .password(rs.getString("password"))
-                .build();
+        User user = null;
+        if (rs.next()) {
+            user = User.builder()
+                    .id(rs.getLong("id"))
+                    .username(rs.getString("username"))
+                    .password(rs.getString("password"))
+                    .build();
+        }
 
         rs.close();
         ps.close();
